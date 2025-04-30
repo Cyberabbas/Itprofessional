@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISK Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .school-logo {
+            width: 250px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .login-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        
+        .mission-vision-cards {
+            margin: 40px 0;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        
+        /* Dashboard Styles */
+        #dashboard-container {
+            display: none;
+        }
+        
+        .sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .stat-card {
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card i {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+        
+        .table-responsive {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        /* Tabs */
+        .nav-tabs .nav-link {
+            border: none;
+            color: var(--primary-color);
+        }
+        
+        .nav-tabs .nav-link.active {
+            border-bottom: 3px solid var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Page with Login -->
+    <div id="home-page" class="container">
+        <img src="assets/nhma-logo.png" alt="NHMA Logo" class="school-logo">
+        
+        <div class="text-center my-4">
+            <h1>Welcome to MISK Management System</h1>
+            <p class="lead">Empowering education through technology</p>
+        </div>
+        
+        <!-- Login Interface -->
+        <div class="login-container">
+            <h2 class="text-center mb-4"><i class="fas fa-user-shield"></i> Secure Login</h2>
+            <form id="login-form">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <div class="mb-3" id="staff-name-field" style="display:none;">
+                    <label for="staff-name" class="form-label">Your Full Name</label>
+                    <input type="text" class="form-control" id="staff-name">
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Mission & Vision Cards -->
+        <div class="row mission-vision-cards">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title text-center"><i class="fas fa-bullseye"></i> Our Mission</h3>
+                        <p class="card-text">To provide quality Islamic education that nurtures students academically, morally, and spiritually to become responsible members of society.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title text-center"><i class="fas fa-eye"></i> Our Vision</h3>
+                        <p class="card-text">To be a leading Islamic educational institution that produces well-rounded individuals grounded in faith, knowledge, and good character.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dashboard Container (Initially Hidden) -->
+    <div id="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar col-md-3 col-lg-2 d-md-block">
+            <div class="text-center mb-4">
+                <img src="assets/nhma-logo-sm.png" alt="NHMA Logo" width="120">
+            </div>
+            <ul class="nav flex-column" id="dashboard-menu">
+                <!-- Menu items will be populated by JavaScript based on role -->
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2" id="dashboard-title">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="me-2">
+                        <span id="current-date" class="badge bg-primary"></span>
+                        <span id="current-time" class="badge bg-secondary ms-2"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content Sections -->
+            <div id="dashboard-sections">
+                <!-- Staff Dashboard Sections -->
+                <div id="staff-dashboard" class="dashboard-section">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="stat-card bg-primary">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5>Total Students</h5>
+                                        <h2>187</h2>
+                                    </div>
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card bg-success">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5>Classes</h5>
+                                        <h2>9</h2>
+                                    </div>
+                                    <i class="fas fa-school"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card bg-warning">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5>Pending Fees</h5>
+                                        <h2>₦245,000</h2>
+                                    </div>
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Student Management -->
+                    <div class="card mt-4">
+                        <div class="card-header bg-info text-white">
+                            <i class="fas fa-users me-2"></i> Student Management
+                        </div>
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="studentTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button">Register New</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="view-tab" data-bs-toggle="tab" data-bs-target="#view" type="button">View Students</button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content p-3 border border-top-0 rounded-bottom">
+                                <div class="tab-pane fade show active" id="register" role="tabpanel">
+                                    <form>
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label">First Name</label>
+                                                <input type="text" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Middle Name</label>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3">
+                                                <label class="form-label">Gender</label>
+                                                <select class="form-select" required>
+                                                    <option>Male</option>
+                                                    <option>Female</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Class</label>
+                                                <select class="form-select" required>
+                                                    <option>Nursery 1</option>
+<option>Nursery 2</option>
+                  <option>Nursery 3</option>                             <option>Primary 1</option>
+<option>Primary 2</option>
+
+<option>Primary 3</option>
+<option>Primary 4</option>
+<option>Primary 5</option>
+
+
+
+
+
+</select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Guardian Phone</label>
+                                                <input type="tel" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Register Student</button>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="view" role="tabpanel">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Class</th>
+                                                    <th>Guardian</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>NHMA-001</td>
+                                                    <td>Aisha Mohammed</td>
+                                                    <td>Primary 3</td>
+                                                    <td>Yusuf Mohammed</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Report Generation -->
+                    <div class="card mt-4">
+                        <div class="card-header bg-success text-white">
+                            <i class="fas fa-file-alt me-2"></i> Report Generation
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Select Class</label>
+                                    <select class="form-select mb-3">
+                                        <option>Nursery 1</option>
+                  <option>Nursery2</option>            <option>Nursery3</option>          <option>Primary 1</option>
+                  <option>Primary2</option>   
+                  <option>Primary3</option>
+                  <option>Primary4</option>
+                  <option>Primary5</option>
+                  </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Select Term</label>
+                                    <select class="form-select mb-3">
+                                        <option>First Term</option>
+                                        <option>Second Term</option>
+                            <option>Third Term</option>        </select>
+                                </div>
+                            </div>
+                            <button class="btn btn-success">Generate Reports</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Director Dashboard Sections -->
+                <div id="director-dashboard" class="dashboard-section">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="stat-card bg-primary">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5>Total Students</h5>
+                                        <h2>187</h2>
+                                    </div>
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card bg-danger">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5>Staff Members</h5>
+                                        <h2>14</h2>
+                                    </div>
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card bg-warning">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5>Outstanding Fees</h5>
+                                        <h2>₦245,000</h2>
+                                    </div>
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Staff Management -->
+                    <div class="card mt-4">
+                        <div class="card-header bg-dark text-white">
+                            <i class="fas fa-chalkboard-teacher me-2"></i> Staff Management
+                        </div>
+                        <div class="card-body">
+                            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+                                <i class="fas fa-plus me-2"></i> Add Staff
+                            </button>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Salary</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>STF-001</td>
+                                            <td>Mr. Abdul Rahman</td>
+                                            <td>Head Teacher</td>
+                                            <td>₦120,000</td>
+                                            <td><span class="badge bg-success">Active</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Financial Overview -->
+                    <div class="card mt-4">
+                        <div class="card-header bg-info text-white">
+                            <i class="fas fa-chart-pie me-2"></i> Financial Overview
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Fee Collection</h5>
+                                    <canvas id="feeChart" height="200"></canvas>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Top Defaulters</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Student</th>
+                                                    <th>Class</th>
+                                                    <th>Amount Due</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Musa Ibrahim</td>
+                                                    <td>Primary 4</td>
+                                                    <td>₦15,000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Staff Modal -->
+    <div class="modal fade" id="addStaffModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Staff Member</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Middle Name</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Position</label>
+                                <select class="form-select" required>
+                                    <option>Teacher</option>
+                                    <option>Head Teacher</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Salary</label>
+                                <input type="number" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Join Date</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save Staff</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 School Street, Education City</p>
+                    <p><i class="fas fa-phone"></i> +123 456 7890</p>
+                    <p><i class="fas fa-envelope"></i> info@nhma.edu</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">About MISK</a></li>
+                        <li><a href="#" class="text-white">Academic Calendar</a></li>
+                        <li><a href="#" class="text-white">School Policies</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <a href="#" class="text-white me-2"><i class="fab fa-facebook-f fa-lg"></i></a>
+                    <a href="#" class="text-white me-2"><i class="fab fa-twitter fa-lg"></i></a>
+                    <a href="#" class="text-white me-2"><i class="fab fa-instagram fa-lg"></i></a>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2025 MARYAM INTERNATIONAL SCHOOL KARAGA. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Sample JavaScript for the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update date and time
+            function updateDateTime() {
+                const now = new Date();
+                document.getElementById('current-date').textContent = now.toLocaleDateString();
+                document.getElementById('current-time').textContent = now.toLocaleTimeString();
+            }
+            
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Login form handler
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Simple authentication (in real app, use proper authentication)
+                if ((username === 'staff' && password === 'staff123') || 
+                    (username === 'director' && password === 'director123')) {
+                    
+                    // Hide home page, show dashboard
+                    document.getElementById('home-page').style.display = 'none';
+                    document.getElementById('dashboard-container').style.display = 'block';
+                    
+                    // Set up dashboard based on role
+                    if (username === 'staff') {
+                        setupStaffDashboard();
+                    } else {
+                        setupDirectorDashboard();
+                    }
+                } else {
+                    alert('Invalid credentials. Please try again.');
+                }
+            });
+            
+            // Setup Staff Dashboard
+            function setupStaffDashboard() {
+                document.getElementById('dashboard-title').textContent = 'Staff Dashboard';
+                document.getElementById('director-dashboard').style.display = 'none';
+                document.getElementById('staff-dashboard').style.display = 'block';
+                
+                // Setup menu
+                const menuItems = [
+                    {icon: 'fa-tachometer-alt', text: 'Dashboard', section: 'dashboard'},
+                    {icon: 'fa-users', text: 'Students', section: 'students'},
+                    {icon: 'fa-file-alt', text: 'Reports', section: 'reports'},
+                    {icon: 'fa-money-bill-wave', text: 'Fees', section: 'fees'},
+                    {icon: 'fa-sign-out-alt', text: 'Logout', action: logout}
+                ];
+                
+                setupMenu(menuItems);
+            }
+            
+            // Setup Director Dashboard
+            function setupDirectorDashboard() {
+                document.getElementById('dashboard-title').textContent = 'Director Dashboard';
+                document.getElementById('staff-dashboard').style.display = 'none';
+                document.getElementById('director-dashboard').style.display = 'block';
+                
+                // Setup menu
+                const menuItems = [
+                    {icon: 'fa-tachometer-alt', text: 'Dashboard', section: 'dashboard'},
+                    {icon: 'fa-chalkboard-teacher', text: 'Staff', section: 'staff'},
+                    {icon: 'fa-users', text: 'Students', section: 'students'},
+                    {icon: 'fa-chart-pie', text: 'Finance', section: 'finance'},
+                    {icon: 'fa-cog', text: 'Settings', section: 'settings'},
+                    {icon: 'fa-sign-out-alt', text: 'Logout', action: logout}
+                ];
+                
+                setupMenu(menuItems);
+                
+                // Initialize charts
+                initCharts();
+            }
+            
+            // Setup dashboard menu
+            function setupMenu(items) {
+                const menu = document.getElementById('dashboard-menu');
+                menu.innerHTML = '';
+                
+                items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'nav-item';
+                    
+                    const a = document.createElement('a');
+                    a.className = 'nav-link';
+                    if (item.section === 'dashboard') a.classList.add('active');
+                    
+                    a.innerHTML = `<i class="fas ${item.icon} me-2"></i> ${item.text}`;
+                    
+                    if (item.action) {
+                        a.href = '#';
+                        a.addEventListener('click', item.action);
+                    } else if (item.section) {
+                        a.href = '#';
+                        a.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            // In a real app, this would load the appropriate section
+                            alert(`Loading ${item.section} section...`);
+                        });
+                    }
+                    
+                    li.appendChild(a);
+                    menu.appendChild(li);
+                });
+            }
+            
+            // Initialize charts
+            function initCharts() {
+                // Fee Chart
+                const feeCtx = document.getElementById('feeChart').getContext('2d');
+                new Chart(feeCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Fee Collection (₦)',
+                            data: [450000, 520000, 480000, 550000, 600000, 580000],
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Logout function
+            function logout() {
+                document.getElementById('dashboard-container').style.display = 'none';
+                document.getElementById('home-page').style.display = 'block';
+                document.getElementById('login-form').reset();
+            }
+        });
+    </script>
+</body>
+</html>
